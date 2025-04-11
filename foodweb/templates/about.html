@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{%load static%}
+{% block title%}About Us-FeastFlick{%endblock%}
+{%block style%}
+<style>* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Same Navbar Styling as Homepage */
+.nav {
+    position: absolute;
+    top: 0;                                                              /* Same Navbar Styling as Homepage */
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.logo {
+    font-size: 24px;                                                     /* Same Navbar Styling as Homepage */
+    font-weight: bold;
+    color: rgb(230, 230, 230);
+}
+
+ .nav-links a {                                                        
+    color: white;
+    text-decoration: none;                                               /* Same Navbar Styling as Homepage */
+    margin: 0 15px;
+    font-size: 16px;
+}
+
+/* About Page Content */
+.header {
+    background-image: url('about.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 50vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.header-content {
+    z-index: 1;
+}
+
+.header-content h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.about-content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #ff5722;
+}
+
+.about-content p {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.team {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+</style>
+{% comment %} <link rel="stylesheet" href="{% static 'css/style_about.css'%}"> {% endcomment %}
+{%endblock style%}
+
+{%block content %}
+<div class="header-content">
+    <h1>About Us</h1>
+</div>
+</header>
+
+<section class="about-content">
+<h2>Our Story</h2>
+<p>Welcome to FeastFlick! We started with a simple mission: to make delicious food accessible to everyone, anytime, anywhere. Created in 2025, we've grown from a small local service to a platform that connects food lovers with their favorite restaurants across the city.</p>
+
+<p>Our team is passionate about food and technology, working tirelessly to ensure every order is delivered hot, fresh, and on time. We partner with local restaurants to bring you a diverse range of cuisines right to your doorstep.</p>
+
+<h2>Our Team</h2>
+<div class="team">
+    <div class="team-member">
+        <img src="" alt="Akshit Sahore">
+        <h3>Akshit Sahore</h3>
+        <p>Founder & CEO</p>
+    </div>
+    <div class="team-member">
+        <img src="" alt="Vansh Mahajan">
+        <h3>Vansh Mahajan</h3>
+        <p>Head Chef</p>
+    </div>
+    <div class="team-member">
+        <img src="" alt="Kavyansh">
+        <h3>Kavyansh</h3>
+        <p>Tech Lead</p>
+    </div>
+</div>
+</section>
+{%endblock%}
