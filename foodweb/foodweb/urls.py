@@ -25,4 +25,5 @@ urlpatterns = [
     path('',views.Homepage,name='Homepage'),
     path('about/',views.About,name='About'),
     path('user/',include('User.urls')),
+    path('orders/',include('Orders.urls')),
 ]

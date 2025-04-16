@@ -1,0 +1,211 @@
+{% extends "layout.html" %}
+{%load static%}
+{% block title%}Order list{%endblock%}
+{%block style%}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+        background-color: #f4f4f4;
+    }
+    
+    /* Hero Section with Background Image */
+    .hero {
+        height: 50vh;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                    url('https://images.unsplash.com/photo-1504674908377-6b5aaca957b6') no-repeat center center/cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        padding: 0 20px;
+    }
+    
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    
+    .hero p {
+        font-size: 1.2rem;
+    }
+    
+    /* Menu Section */
+    .menu-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .menu-container h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: #333;
+    }
+    
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .menu-item {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .menu-item:hover {
+        transform: translateY(-5px);
+    }
+    
+    .menu-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .menu-item h3 {
+        font-size: 1.5rem;
+        padding: 15px;
+        color: #333;
+    }
+    
+    .menu-item p {
+        padding: 0 15px 10px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    .menu-item .price {
+        display: block;
+        padding: 0 15px 10px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #e67e22;
+    }
+    
+    .order-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 0 0 10px 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    
+    .order-btn:hover {
+        background: #d35400;
+    }
+    
+    /* Footer */
+    footer {
+        background: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2rem;
+        }
+    
+        .hero p {
+            font-size: 1rem;
+        }
+    
+        .menu-container h2 {
+            font-size: 2rem;
+        }
+    }
+    .nav {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1;
+    }
+    
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 16px;
+    }
+</style>
+{%endblock style%}
+
+{%block content %}
+<header class="hero">
+    <h1>Explore Our Delicious Menu</h1>
+    <p>Order your favorite meals with just a few clicks!</p>
+</header>
+
+<section class="menu-container">
+    <h2>Food Items Available</h2>
+    <div class="menu-grid">
+       {% comment %} {%for od in order%} {% endcomment %}
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a680" alt="Margherita Pizza">
+            <h3>{{od.item}}</h3>
+            <p>{{od.body}}</p>
+            <span class="price">{{od.price}}</span>
+            <button class="order-btn">Add to Cart</button>
+        </div>
+        {% comment %} {% endfor %%} {% endcomment %}
+        {% comment %} <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1532634922-8fe0b757fb13" alt="Grilled Chicken Salad">
+            <h3>Grilled Chicken Salad</h3>
+            <p>Fresh greens, grilled chicken, avocado, and vinaigrette.</p>
+            <span class="price">$9.99</span>
+            <button class="order-btn">Add to Cart</button>
+        </div>
+        
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349" alt="Cheeseburger">
+            <h3>Classic Cheeseburger</h3>
+            <p>Juicy beef patty with cheddar, lettuce, and fries.</p>
+            <span class="price">$10.99</span>
+            <button class="order-btn">Add to Cart</button>
+        </div>
+        
+        <div class="menu-item">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd" alt="Sushi Platter">
+            <h3>Sushi Platter</h3>
+            <p>Assorted sushi with soy sauce and wasabi.</p>
+            <span class="price">$15.99</span>
+            <button class="order-btn">Add to Cart</button>
+        </div> {% endcomment %}
+       
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Food Ordering Website. All rights reserved.</p>
+</footer>
+{%endblock%}
