@@ -169,7 +169,7 @@
 <section class="menu-container">
     <h2>Food Items Available</h2>
     <div class="menu-grid">
-       {% comment %} {%for od in order%} {% endcomment %}
+        {%for od in order%}
         <div class="menu-item">
             <img src="https://images.unsplash.com/photo-1513104890138-7c749659a680" alt="Margherita Pizza">
             <h3>{{od.item}}</h3>
@@ -177,7 +177,7 @@
             <span class="price">{{od.price}}</span>
             <button class="order-btn">Add to Cart</button>
         </div>
-        {% comment %} {% endfor %%} {% endcomment %}
+         {% endfor %} 
         {% comment %} <div class="menu-item">
             <img src="https://images.unsplash.com/photo-1532634922-8fe0b757fb13" alt="Grilled Chicken Salad">
             <h3>Grilled Chicken Salad</h3>
