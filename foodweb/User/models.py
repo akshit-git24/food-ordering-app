@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class rest_det(models.Model):
     username=models.CharField(max_length=75)

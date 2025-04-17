@@ -15,7 +15,6 @@ def rest_reg(request):
     if request.method=="POST":
         form=forms.create_rest(request.POST,request.FILES)
         if form.is_valid():
-           
               reg=form.save(commit=False)
             #   reg.username=request.user
               reg.save()
