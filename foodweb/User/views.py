@@ -15,9 +15,9 @@ def rest_reg(request):
     if request.method=="POST":
         form=forms.create_rest(request.POST,request.FILES)
         if form.is_valid():
-           if form.password==form.password2:
+           
               reg=form.save(commit=False)
-              reg.username=request.user
+            #   reg.username=request.user
               reg.save()
             # login(request,form.get_user())
               return redirect("orders:order_list")
