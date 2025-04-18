@@ -14,11 +14,12 @@
                 <a href="/">Home</a>
                 <a href="/about">About</a>
                 <a href="/orders">Orders</a>
+                <a href="/orders/create">new order</a>
                 {%if not user.is_authenticated %}
                 <a href="/user/login">Login</a>
                 <a href="/user/register">Register</a>
                 {%else%}
-                <a href="/orders/create">new order</a>
+                
                 <a href="/user/logout"><form action="{% url 'users:logout'%}"  method="post">
                     {% csrf_token %}
                     <button style='background-color: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-family: Arial, sans-serif; font-size: 14px; margin: 0 10px; cursor: pointer; transition: background-color 0.3s;'>logout button</button>
