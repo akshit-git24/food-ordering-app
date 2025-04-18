@@ -1,11 +1,15 @@
 from django import forms
 from . import models
-from django.forms import ModelForm, TextInput, EmailInput,NumberInput
+from django.contrib.auth.hashers import make_password
 class create_rest(forms.ModelForm):   
-    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'style': 'max-width: 300px;',
+        'placeholder': 'Confirm Password'
+    }), label="Confirm Password")
     class Meta:
         model = models.rest_det
-        fields =['username','email','password','rest_id','password2']
+        fields =['username','email','password','rest_id','confirm_password']
         widgets ={
             'username': forms.TextInput(attrs={
                 'class': "form-control",
@@ -22,12 +26,6 @@ class create_rest(forms.ModelForm):
                 'type':'password',
                 'placeholder': 'password'
                 }),
-            'password2':forms.TextInput(attrs={
-                'class': "form-control", 
-                'style': 'max-width: 300px;',
-                'type':'password',
-                'placeholder': 'Confirm Password',
-                }),
             'rest_id':forms.NumberInput(attrs={
                 'class': "form-control", 
                 'style': 'max-width: 300px;',
@@ -40,16 +38,17 @@ class create_rest(forms.ModelForm):
             confirm_password = cleaned_data.get('confirm_password')
             
             if password and confirm_password and password != confirm_password:
-                raise ValidationError("Passwords don't match")
+                 return self.add_error('confirm_password', "Passwords don't match")
+                
             
             return cleaned_data
     
-        def save(self, commit=True):
-            # Remove confirm_password from the data as it's not a model field
+        def save(self, commit=True): 
             user = super().save(commit=False)
-            user.set_password(self.cleaned_data['password'])  # Hash the password
-            rest = super().save(commit=False)
-            rest.user = user
+            password = self.cleaned_data.get('password')
+            if password:
+                user.set_password(password)
+            
             if commit:
                 user.save()
             

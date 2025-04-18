@@ -11,7 +11,7 @@ def order_list(request):
     return render(request,'order_list.html',{'order':order})
 
 @login_required(login_url="/user/register")
-@user_passes_test(is_rest)
+# @user_passes_test(is_rest)
 def create_order(request):
       if request.method=="POST":
          form=forms.orderform(request.POST,request.FILES)
