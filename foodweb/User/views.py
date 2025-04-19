@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout
 from . import forms
-from. import models
+from . import models
 
 # Create your views here.
 def choice(request):
@@ -20,15 +20,16 @@ def rest_reg(request):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
+            confirm_password = form.cleaned_data.get('confirm_password')
             rest_id = form.cleaned_data.get('rest_id')
             
             user = models.rest_det.objects.create_user(
                 username=username,
                 email=email,
                 password=password,
-                rest_id=rest_id
-            )
-            
+                rest_id=rest_id,
+                confirm_password=confirm_password
+            )        
             # Log the user in
             login(request, user)
             return redirect('orders:order_list')

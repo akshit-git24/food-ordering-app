@@ -20,7 +20,7 @@ class create_rest(forms.ModelForm):
                 'style': 'max-width: 300px;',
                 'placeholder': 'Email'
                 }),
-            'password':forms.TextInput(attrs={
+            'password':forms.PasswordInput(attrs={
                 'class': "form-control", 
                 'style': 'max-width: 300px;',
                 'type':'password',
@@ -32,24 +32,5 @@ class create_rest(forms.ModelForm):
                 'placeholder': 'Restaurant ID'
                 }),
         }
-        def clean(self):
-            cleaned_data = super().clean()
-            password = cleaned_data.get('password')
-            confirm_password = cleaned_data.get('confirm_password')
+        
             
-            if password and confirm_password and password != confirm_password:
-                 return self.add_error('confirm_password', "Passwords don't match")
-                
-            
-            return cleaned_data
-    
-        def save(self, commit=True): 
-            user = super().save(commit=False)
-            password = self.cleaned_data.get('password')
-            if password:
-                user.set_password(password)
-            
-            if commit:
-                user.save()
-            
-            return user
