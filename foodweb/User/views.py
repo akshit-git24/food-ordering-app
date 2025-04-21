@@ -1,17 +1,45 @@
 from django.shortcuts import render,redirect
-from .models import rest_det
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import login,logout
+from django.contrib.auth import authenticate, login,logout
 from . import forms
 from . import models
+from functools import wraps
+from django.http import HttpResponseForbidden
+
 
 # Create your views here.
-def choice(request):
+def choice_register(request):
     return render(request,'register_c.html')
 
+def choice_login(request):
+    return render(request,'login_c.html')
+
 def customer(request):
-    return render(request,'cust.html')
+    if request.method == "POST":
+        form=UserCreationForm(request.POST)#this
+        if form.is_valid():                #and this validates the form and stops if there also anyone trying to register using same username as it exists already
+            login(request,form.save())
+            return redirect("users:Homepage")#here users:Home == {app_name defined in urls.py:name of the path}
+    else:
+        form=UserCreationForm()          
+    return render(request,'cust.html',{"form":form})      #we use this to add form in our template
+
+
+
+def login_customer(request):
+    if request.method =="POST":
+        form=AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            login(request,form.get_user())#we login 
+            if "next" in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect("orders:order_list")
+    else:
+        form=AuthenticationForm()    
+    return render(request,'login_user.html',{"form":form})
 
 def rest_reg(request):
     if request.method=="POST":
@@ -29,42 +57,26 @@ def rest_reg(request):
                 password=password,
                 rest_id=rest_id,
                 confirm_password=confirm_password
-            )        
-            # Log the user in
-            login(request, user)
-            return redirect('orders:order_list')
+            ) 
+            if user:
+                auth_user = authenticate(request, username=username, password=password)
+                if auth_user:
+                    login(request, auth_user)
+                    return redirect('orders:order_list')
+                else:
+                    form.add_error(None, "You aren't autherised")
+            else:
+                form.add_error(None, "User creation failed") 
+            
     else:
           form=forms.create_rest()
-    return render(request,'rest.html',{'form':form})    
-# def log_reg(request):   
-# def rest_reg(request):
-#     if request.method=='POST':
-#         username=request.POST['username']
-#         email=request.POST['email']
-#         restaurant_id=request.POST.get('rest_id')
-#         password=request.POST.get('password')
-#         password2 = request.POST.get('confirm_password')
+    context = {
+        'user': request.user,
+        'form':form
+                }       
+    return render(request,'rest.html',context)    
 
-#         if rest_det.objects.filter(email=email).exists():
-#             messages.info(request,'Email already exist')
-#         elif rest_det.objects.filter(rest_id=restaurant_id).exists():
-#              messages.info(request,'restaurant already exist')
-#         else:
-#             if password==password2:
-#                 restraunt=rest_det.objects.create(
-#                     username=username,email=email,
-#                     rest_id=restaurant_id,
-#                     password=password
-#                     )
-#                 restraunt.save()
-#                 login(request)
-#                 return render(request,'home.html')
-#             else:
-#                 messages.info(request,"password not the same")
-           
-#     else:   
-#         return render(request,'rest.html')
-
+ 
 def logout_view(request):
     if request.method =="POST":
         logout(request)
@@ -72,3 +84,9 @@ def logout_view(request):
 
 def Homepage(request):
     return render(request,'home.html')
+
+
+#we use this to add form in our template
+# user=authenticate(request, username=username, password=password)     
+#             login(request, user)
+#             return redirect('orders:order_list')
