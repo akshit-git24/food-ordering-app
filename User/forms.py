@@ -5,9 +5,8 @@ from .models import RegularUserProfile, StaffProfile
 
 class RegularUserRegistrationForm(UserCreationForm):
     address = forms.CharField(widget=forms.Textarea, required=False)
-    phone_number = forms.CharField(max_length=15, required=False)
+    Contact_number = forms.CharField(max_length=10, required=False)
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
-    
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
@@ -17,13 +16,22 @@ class RegularUserRegistrationForm(UserCreationForm):
         user.is_staff = False  # Ensure user is not staff
         if commit:
             user.save()
+            profile = RegularUserProfile(
+                user=user,
+                address=self.cleaned_data.get('address'),
+                Contact_number=self.cleaned_data.get('Contact_number')
+            )
+            profile.save()
         return user
 
 class StaffRegistrationForm(UserCreationForm):
-    department = forms.CharField(max_length=100)
-    employee_id = forms.CharField(max_length=20)
-    office_location = forms.CharField(max_length=100)
-    extension_number = forms.CharField(max_length=10, required=False)
+    Restaurant_id = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'max-width: 3000px;',
+           
+        }))
+    Restaurant_location= forms.CharField(max_length=100)
+    Contact_number = forms.CharField(max_length=10, required=False)
     
     class Meta:
         model = User
@@ -37,10 +45,9 @@ class StaffRegistrationForm(UserCreationForm):
             # Create the staff profile
             profile = StaffProfile(
                 user=user,
-                department=self.cleaned_data.get('department'),
-                employee_id=self.cleaned_data.get('employee_id'),
-                office_location=self.cleaned_data.get('office_location'),
-                extension_number=self.cleaned_data.get('extension_number')
+                Restaurant_id=self.cleaned_data.get('Restaurant_id'),
+                Restaurant_location=self.cleaned_data.get('Restaurant_location'),
+                Contact_number=self.cleaned_data.get('Contact_number')
             )
             profile.save()
         return user

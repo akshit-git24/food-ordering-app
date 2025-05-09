@@ -145,7 +145,7 @@
     <div class="container">
         <div class="card">
             <h2>Register as Restaurant</h2>
-            <form method='post'>
+            <form method='post'class='form-group'>
                 {% csrf_token %}
                 {% if form.non_field_errors %}
                    <div class="alert alert-danger">
