@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import rest_det
+from .models import RegularUserProfile,StaffProfile
 # Register your models here.
-admin.site.register(rest_det)
+admin.site.register(StaffProfile)
+admin.site.register(RegularUserProfile)

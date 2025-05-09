@@ -123,8 +123,8 @@ body {
     <div>
         <form class="form-with-validation" action="/user/customer/" method="post">
             {% csrf_token %} 
-            {{ form }}  
-            <button class="cta-button">submit</button>
+            {{ form.as_p }}  
+            <button class="cta-button" type="submit">submit</button>
         </form>
     </div>
 </div>

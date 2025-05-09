@@ -1,108 +1,79 @@
-from django.shortcuts import render,redirect
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login,logout
-from . import forms
-from . import models
-from .models import rest_det
-from functools import wraps
-from django.http import HttpResponseForbidden
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from .forms import (
+    StaffRegistrationForm,RegularUserRegistrationForm
+)
+def customer_signup(request):
+    if request.method == 'POST':
+        form = RegularUserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f"Regular user account created for {user.username}!")
+            return redirect('Homepage')
+    else:
+        form = RegularUserRegistrationForm()
+    return render(request, 'cust.html', {'form': form})
 
+def restaurant_signup(request):
+    if request.method == 'POST':
+        form = StaffRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f"Staff account created for {user.username}!")
+            return redirect('Homepage')
+    else:
+        form = StaffRegistrationForm()
+    return render(request, 'rest.html', {'form': form})
 
-# Create your views here.
+# Helper function to check user type
+def get_user_type(user):
+    if user.is_staff:
+        return 'staff'
+    else:
+        return 'regular'
+
 def choice_register(request):
-    return render(request,'register_c.html')
+     return render(request,"register_c.html")
 
 def choice_login(request):
-    return render(request,'login_c.html')
+    return render(request,"login_c.html")
 
-def customer(request):
-    if request.method == "POST":
-        form=UserCreationForm(request.POST)#this
-        if form.is_valid():                #and this validates the form and stops if there also anyone trying to register using same username as it exists already
-            login(request,form.save())
-            return redirect("users:Homepage")#here users:Home == {app_name defined in urls.py:name of the path}
-    else:
-        form=UserCreationForm()          
-    return render(request,'cust.html',{"form":form})      #we use this to add form in our template
-
-
-
-def login_customer(request):
-    if request.method =="POST":
-        form=AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            login(request,form.get_user())#we login 
-            if "next" in request.POST:
-                return redirect(request.POST.get('next'))
-            else:
-                return redirect("orders:order_list")
-    else:
-        form=AuthenticationForm()    
-    return render(request,'login_user.html',{"form":form})
-
-def rest_reg(request):
-    if request.method=="POST":
-        form=forms.create_rest(request.POST,request.FILES)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
-            confirm_password = form.cleaned_data.get('confirm_password')
-            rest_id = form.cleaned_data.get('rest_id')
-            
-            user = models.rest_det.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                rest_id=rest_id,
-                confirm_password=confirm_password
-            )
-            if isinstance(user, rest_det):
-                # Log the user in
-                login(request, user)
-                return redirect('orders:order_list')
-            # if user:
-            #     # Either use direct login without re-authentication:
-            #     login(request, user)  # Log in with the user object directly
-            #     return redirect('orders:order_list')
-            
-    else:
-          form=forms.create_rest()
-    context = {
-        'user': request.user,
-        'form':form
-                }       
-    return render(request,'rest.html',context)    
-
- 
 def logout_view(request):
-    if request.method =="POST":
+    if request.method == "POST":
         logout(request)
         return redirect("users:Homepage")
 
-def Homepage(request):
-    return render(request,'home.html')
 
-def login_restaurant(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None and isinstance(user, rest_det):
-            login(request, user)
-            if "next" in request.POST:
-                return redirect(request.POST.get('next'))
-            else:
-                return redirect("orders:order_list")
-        else:
-            messages.error(request, "Invalid username or password")
-    
-    return render(request, 'login_restaurant.html')
+def Homepage(request):
+    return render(request, 'home.html')
 
 #we use this to add form in our template
 # user=authenticate(request, username=username, password=password)     
 #             login(request, user)
 #             return redirect('orders:order_list')
+# class CustomerSignUpView(CreateView):
+#     form_class = CustomerSignUpForm
+#     template_name = 'User/login_user.html'
+#     success_url = reverse_lazy('Homepage')
+    
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect(self.success_url)
+
+# class RestaurantSignUpView(CreateView):
+#     form_class = RestaurantSignUpForm
+#     template_name = 'User/rest.html'
+#     success_url = reverse_lazy('Homepage')
+    
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect(self.success_url)

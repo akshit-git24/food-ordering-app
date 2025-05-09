@@ -14,7 +14,9 @@
                 <a href="/">Home</a>
                 <a href="/about">About</a>
                 <a href="/orders">Orders</a>
+                {% if user.is_staff%}
                 <a href="/orders/create">new order</a>
+                {%endif%}
                 {%if not user.is_authenticated %}
                 <a href="/user/login_choice">Login</a>
                 <a href="/user/register_choice">Register</a>

@@ -1,66 +1,30 @@
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.validators import RegexValidator, MinLengthValidator
 from django.core.exceptions import ValidationError
+import re
 
-# Create your models here.
-class RestUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None,confirm_password=None, **extra_fields):
-        if not username:
-            raise ValueError('The Username field must be set')
-        
-        email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
-        if confirm_password is not None and password != confirm_password:
-            raise ValidationError("Passwords don't match")
-        
-        # Here I'm Removing confirm_password from extra_fields if  exists in it.
-        if 'confirm_password' in extra_fields:
-            extra_fields.pop('confirm_password')
-            
-        user = self.model(username=username, email=email, **extra_fields)
-        
-        if password:
-            user.set_password(password)  # password hashing is done here by logic written manually
-        
-        user.save(using=self._db)
-        return user
+class RegularUserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='regular_profile')
+    address = models.TextField(blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
     
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        
-        return self.create_user(username, email, password, **extra_fields)
-
-class rest_det(AbstractBaseUser):
-
-    REQUIRED_FIELDS = ['email']
-    is_active = models.BooleanField(default=True)
-    USERNAME_FIELD = 'username'
-    username=models.CharField(max_length=75,unique=True)
-    email=models.EmailField(unique=True)
-    rest_id=models.IntegerField(primary_key=True)
-    objects = RestUserManager()
     def __str__(self):
-        return str(self.username)
+        return f"Regular User: {self.user.username}"
+
+# Profile model for staff users
+class StaffProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_profile')
+    department = models.CharField(max_length=100)
+    employee_id = models.CharField(max_length=20)
+    office_location = models.CharField(max_length=100)
+    extension_number = models.CharField(max_length=10, blank=True, null=True)
     
-
-    # groups = models.ManyToManyField(
-    #     'auth.Group',
-    #     related_name='rest_det_set',  # Changed from default 'user_set'
-    #     blank=True,
-    #     help_text='The groups this user belongs to.',
-    #     verbose_name='groups',
-    # )
-    # user_permissions = models.ManyToManyField(
-    #     'auth.Permission',
-    #     related_name='rest_det_set',  # Changed from default 'user_set'
-    #     blank=True,
-    #     help_text='Specific permissions for this user.',
-    #     verbose_name='user permissions',
-    # )       
-
-
+    def __str__(self):
+        return f"Staff: {self.user.username} ({self.department})"
 # to add password strongness
     # def validate_password_strength(password):
     #      """
