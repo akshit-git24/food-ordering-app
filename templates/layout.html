@@ -15,7 +15,7 @@
                 <a href="/about">About</a>
                 <a href="/orders">Orders</a>                
                 {% if user.is_staff%}
-                <a href="/orders/create">new order</a>
+                <a href="/orders/create">Create New Order</a>
                 <a href="/user/cust/dash">Dashboard</a>
                 {%endif%}
                 {%if not user.is_authenticated %}
@@ -32,7 +32,7 @@
                 </form></a> 
                 {% endif %}
             </div>
-        </nav>
+        </nav>    
 {%block content%}
 {%endblock%}
 </body>

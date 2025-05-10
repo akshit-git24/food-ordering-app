@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import (
     StaffRegistrationForm,RegularUserRegistrationForm,RestaurantLoginForm,CustomerLoginForm
 )
+from .models import StaffProfile,RegularUserProfile
+from Orders.models import orders
 def customer_signup(request):
     if request.method == 'POST':
         form = RegularUserRegistrationForm(request.POST)
@@ -37,11 +39,9 @@ def customer_login_view(request):
     if request.method == 'POST':
         form = CustomerLoginForm(data=request.POST)
         if form.is_valid():
-           
             user = form.user
             login(request, user)
-            
-            # Redirect to customer dashboard
+
             next_url = request.GET.get('next', 'customer_dashboard')
             return redirect('Homepage')
     else:
@@ -50,28 +50,17 @@ def customer_login_view(request):
     return render(request, 'login_user.html', {'form': form})
 
 def restaurant_login_view(request):
-    """View for restaurant login"""
     if request.method == 'POST':
         form = RestaurantLoginForm(data=request.POST)
         if form.is_valid():
-            # The form.clean() method already authenticated the user
-            # and stored it in form.user
-            user = form.user
-            login(request, user)
+            user = form.user # The form.clean() method already authenticated the user                           
+            login(request, user)  # and stored it in form.user
             
-            # Redirect to restaurant dashboard
-            next_url = request.GET.get('next', 'restaurant_dashboard')
+            next_url = request.GET.get('next', 'Dashboard')
             return redirect('Homepage')
     else:
         form = RestaurantLoginForm()
     return render(request, 'login_restaurant.html', {'form': form})
-
-# Helper function to check user type
-def get_user_type(user):
-    if user.is_staff:
-        return 'staff'
-    else:
-        return 'regular'
 
 def choice_register(request):
      return render(request,"register_c.html")
@@ -83,17 +72,42 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
         return redirect("users:Homepage")
-
+    
+@login_required
 def Dashboard(request):
-    return render(request,'user_dash.html')
+    user=request.user
+    staff_profile = StaffProfile.objects.get(user=request.user)
+    
+    ''' to get data from user model firstly,
+        user=request.user
+        and pass the context and then use it as normally'''
+    
+    # Query parameters from URL
+    # query_param = request.GET.get('param', None)
+    # if query_param:
+    #     filtered_data = filtered_data.filter(field_name__contains=query_param)
+    
+    context = {
+        'data': staff_profile,
+        'user': user,
+    }
+    
+    return render(request,'user_dash.html', context)
 
+@login_required
 def Profile(request):
-    return render(request,'user_profile.html')
+    user=request.user
+    user_profile = RegularUserProfile.objects.get(user=request.user)
+    context = {
+        'data': user_profile,
+        'user': user,
+    }
+    return render(request,'user_profile.html',context)
 
 def Homepage(request):
     return render(request, 'home.html')
 
-#we use this to add form in our template
+#I use this to add form in our template
 # user=authenticate(request, username=username, password=password)     
 #             login(request, user)
 #             return redirect('orders:order_list')
