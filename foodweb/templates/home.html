@@ -1,0 +1,232 @@
+{% extends "layout.html" %}
+{%load static%}
+{% block title%}Homepage{%endblock%}
+{%block style%}
+<link rel="stylesheet" href="{% static 'css/home.css'%}">
+{%endblock style%}
+
+{%block content %}
+<div class="hero-content">
+    <h1>Delicious Food Delivered Fast</h1>
+    <p>Order from your favorite restaurants with just a few clicks</p>
+    <a href="/orders" class="order-btn">Order Now</a>
+</div>
+</header>
+
+<section class="featured">
+<h2>Best Dishes</h2>
+<div class="food-grid">
+    <div class="food-item">
+        <img src="https://th.bing.com/th/id/OIP.6kpdp0PIgna8W5Mw9ZvZ1gHaE8?w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2" alt="Pizza">
+        <h3>Burger</h3>
+        
+    </div>
+    <div class="food-item">
+        <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3" alt="Burger">
+        <h3>Margherita Pizza</h3>
+        
+    </div>
+    <div class="food-item">
+        <img src="https://www.bing.com/th/id/OIP.hX-6gzvgC5Xahc4vw-zQqAHaJ4?w=150&h=200&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2" alt="Sushi">
+        <h3>Sushi Platter</h3>
+        
+    </div>
+</div>
+</section>
+
+<footer class="footer">
+    <div class="contact-info">
+        <p>Contact Us: <a href="mailto:akshitsahore2827@gmail.com">akshitsahore2827@gmail.com</a></p>
+        <p>Phone:+91 8219767230</p>
+        <p>Address:Una,Himachal Pradesh</p>
+    </div>
+    <div class="rights">
+        <p>&copy; 2025 FeastFlick(Akshit Sahore). All Rights Reserved.</p>
+    </div>
+</footer>
+{%endblock%}
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Order Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header Section */
+        .header {
+            background-image: url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        .hero-content {
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .order-btn {
+            background: #ff5722;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .order-btn:hover {
+            background: #e64a19;
+        }
+
+        /* Featured Section */
+        .featured {
+            padding: 60px 20px;
+            text-align: center;
+            background: #f5f5f5;
+        }
+
+        .featured h2 {
+            font-size: 36px;
+            margin-bottom: 40px;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .food-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .food-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Food Order Hub</div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/orders">Orders</a>
+                {%if not user.is_authenticated %}
+                <a href="/login">Login</a>
+                <a href="Register">Register</a>
+                {%else%}
+                <a href="/user/logout"><form action="{% url 'users:logout'%}"  method="post">
+                    {% csrf_token %}
+                    <button class="cta-button">logout button</button>
+                </form></a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="hero-content">
+            <h1>Delicious Food Delivered Fast</h1>
+            <p>Order from your favorite restaurants with just a few clicks</p>
+            <button class="order-btn">Order Now</button>
+        </div>
+    </header>
+
+    <section class="featured">
+        <h2>Featured Dishes</h2>
+        <div class="food-grid">
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1565299624946-baccd3051810" alt="Pizza">
+                <h3>Margherita Pizza</h3>
+                <p>$12.99</p>
+            </div>
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3" alt="Burger">
+                <h3>Classic Burger</h3>
+                <p>$9.99</p>
+            </div>
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349" alt="Sushi">
+                <h3>Sushi Platter</h3>
+                <p>$15.99</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html> {% endcomment %}
