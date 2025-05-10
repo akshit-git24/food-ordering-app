@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .profile-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .profile-header {
+            background-color: #1e90ff;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin-bottom: 15px;
+        }
+        .profile-header h1 {
+            margin: 10px 0;
+            font-size: 26px;
+        }
+        .profile-header p {
+            margin: 5px 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .profile-nav {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .profile-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .profile-nav li {
+            margin: 0;
+        }
+        .profile-nav a {
+            display: block;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .profile-nav a:hover,
+        .profile-nav a.active {
+            background-color: #1e90ff;
+            color: white;
+        }
+        .profile-body {
+            padding: 30px;
+        }
+        .profile-section {
+            margin-bottom: 30px;
+        }
+        .profile-section h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #222;
+            border-bottom: 2px solid #1e90ff;
+            padding-bottom: 8px;
+        }
+        .profile-section p {
+            color: #555;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .detail-item i {
+            color: #1e90ff;
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .orders-table th,
+        .orders-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .orders-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        .orders-table td {
+            color: #555;
+        }
+        .orders-table tr:hover {
+            background-color: #f1f3f5;
+        }
+        @media (max-width: 768px) {
+            .profile-nav ul {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-nav a {
+                padding: 12px;
+            }
+            .profile-header img {
+                width: 80px;
+                height: 80px;
+            }
+            .profile-header h1 {
+                font-size: 22px;
+            }
+            .orders-table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img src="https://via.placeholder.com/150" alt="User Avatar">
+                <h1>Jane Smith</h1>
+                <p>jane.smith@example.com</p>
+                <p>New York, NY</p>
+            </div>
+            <nav class="profile-nav">
+                <ul>
+                    <li><a href="#about" class="active">About</a></li>
+                    <li><a href="#personal">Personal Details</a></li>
+                    <li><a href="#orders">Orders</a></li>
+                </ul>
+            </nav>
+            <div class="profile-body">
+                <div class="profile-section" id="about">
+                    <h2>About</h2>
+                    <p>Creative professional with a passion for design and technology. Experienced in managing multiple projects and delivering high-quality results. Always eager to learn and explore new opportunities.</p>
+                    <p><i class="fas fa-calendar-alt"></i> Joined March 2021</p>
+                </div>
+                <div class="profile-section" id="personal">
+                    <h2>Personal Details</h2>
+                    <div class="detail-item">
+                        <i class="fas fa-phone"></i>
+                        <p>Phone: +1 (555) 123-4567</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: jane.smith@example.com</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Address: 123 Main St, New York, NY 10001</p>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-birthday-cake"></i>
+                        <p>Date of Birth: June 15, 1990</p>
+                    </div>
+                </div>
+                <div class="profile-section" id="orders">
+                    <h2>Recent Orders</h2>
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Item</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#12345</td>
+                                <td>2025-05-09</td>
+                                <td>Wireless Headphones</td>
+                                <td>Delivered</td>
+                                <td>$89.99</td>
+                            </tr>
+                            <tr>
+                                <td>#12346</td>
+                                <td>2025-05-07</td>
+                                <td>Smart Watch</td>
+                                <td>Shipped</td>
+                                <td>$199.99</td>
+                            </tr>
+                            <tr>
+                                <td>#12347</td>
+                                <td>2025-05-05</td>
+                                <td>Laptop Sleeve</td>
+                                <td>Processing</td>
+                                <td>$29.99</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

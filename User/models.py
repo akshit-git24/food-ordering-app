@@ -9,7 +9,7 @@ import re
 class RegularUserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='regular_profile')
     address = models.TextField(blank=True, null=True)
-    Contact_number = models.CharField(max_length=15, blank=True, null=True)
+    Contact_number = models.CharField(max_length=15, blank=True, null=True,unique=True)
     date_of_birth = models.DateField(blank=True, null=True)
     
     def __str__(self):
@@ -18,15 +18,13 @@ class RegularUserProfile(models.Model):
 # Profile model for staff users
 class StaffProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_profile')
-    Restaurant_id = models.IntegerField(validators=[
-            MinLengthValidator(5,"Phone number must be 10 digits."),
-            MaxLengthValidator(5, "Phone number must be 10 digits.")
-        ],unique=True,default=True)
+    Restaurant_id = models.IntegerField(unique=True,default=True)
+    Restaurant_name=models.CharField(max_length=25,default=False,null=False)
     Restaurant_location = models.CharField(max_length=100)
     Contact_number = models.CharField(max_length=10, blank=True, null=True)
     
     def __str__(self):
-        return f"Staff: {self.user.username} ({self.department})"
+        return f" {self.user.username}--{self.Restaurant_name}--{self.Restaurant_id}"
 # to add password strongness
     # def validate_password_strength(password):
     #      """

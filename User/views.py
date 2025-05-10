@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import (
-    StaffRegistrationForm,RegularUserRegistrationForm
+    StaffRegistrationForm,RegularUserRegistrationForm,RestaurantLoginForm,CustomerLoginForm
 )
 def customer_signup(request):
     if request.method == 'POST':
@@ -26,11 +26,45 @@ def restaurant_signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, f"Staff account created for {user.username}!")
+            messages.success(request, f"Restaurant account created for {user.username}!")
             return redirect('Homepage')
     else:
         form = StaffRegistrationForm()
     return render(request, 'rest.html', {'form': form})
+
+def customer_login_view(request):
+    """View for customer login"""
+    if request.method == 'POST':
+        form = CustomerLoginForm(data=request.POST)
+        if form.is_valid():
+           
+            user = form.user
+            login(request, user)
+            
+            # Redirect to customer dashboard
+            next_url = request.GET.get('next', 'customer_dashboard')
+            return redirect('Homepage')
+    else:
+        form = CustomerLoginForm()
+    
+    return render(request, 'login_user.html', {'form': form})
+
+def restaurant_login_view(request):
+    """View for restaurant login"""
+    if request.method == 'POST':
+        form = RestaurantLoginForm(data=request.POST)
+        if form.is_valid():
+            # The form.clean() method already authenticated the user
+            # and stored it in form.user
+            user = form.user
+            login(request, user)
+            
+            # Redirect to restaurant dashboard
+            next_url = request.GET.get('next', 'restaurant_dashboard')
+            return redirect('Homepage')
+    else:
+        form = RestaurantLoginForm()
+    return render(request, 'login_restaurant.html', {'form': form})
 
 # Helper function to check user type
 def get_user_type(user):
@@ -50,6 +84,11 @@ def logout_view(request):
         logout(request)
         return redirect("users:Homepage")
 
+def Dashboard(request):
+    return render(request,'user_dash.html')
+
+def Profile(request):
+    return render(request,'user_profile.html')
 
 def Homepage(request):
     return render(request, 'home.html')
@@ -77,3 +116,6 @@ def Homepage(request):
 #         user = form.save()
 #         login(self.request, user)
 #         return redirect(self.success_url)
+# 
+# # The form.clean() method already authenticated the user
+            # and stored it in form.user

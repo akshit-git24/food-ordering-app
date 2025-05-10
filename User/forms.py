@@ -13,7 +13,7 @@ class RegularUserRegistrationForm(UserCreationForm):
     
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_staff = False  # Ensure user is not staff
+        user.is_staff = False  
         if commit:
             user.save()
             profile = RegularUserProfile(
@@ -31,8 +31,8 @@ class StaffRegistrationForm(UserCreationForm):
            
         }))
     Restaurant_location= forms.CharField(max_length=100)
-    Contact_number = forms.CharField(max_length=10, required=False)
-    
+    Contact_number = forms.CharField(max_length=10, required=True)
+    Restaurant_name=forms.CharField(max_length=25,required=True)
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
@@ -42,15 +42,124 @@ class StaffRegistrationForm(UserCreationForm):
         user.is_staff = True
         if commit:
             user.save()
-            # Create the staff profile
             profile = StaffProfile(
                 user=user,
+                Restaurant_name=self.cleaned_data.get('Restaurant_name'),
                 Restaurant_id=self.cleaned_data.get('Restaurant_id'),
                 Restaurant_location=self.cleaned_data.get('Restaurant_location'),
                 Contact_number=self.cleaned_data.get('Contact_number')
             )
             profile.save()
         return user
+    
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from .models import RegularUserProfile, StaffProfile
+
+User = get_user_model()
+
+class CustomerLoginForm(AuthenticationForm):
+    """Login form for regular customers with username/phone options"""
+    login_field = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email',
+        }),
+        # help_text="Enter your Email:"
+    )
+    Contact_number = forms.IntegerField(
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'contact Number',
+        })
+    )
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        login_field = cleaned_data.get('login_field')
+        Contact_number = cleaned_data.get('Contact_number')
+        
+        if login_field and Contact_number :
+            self.user = None
+            try:
+                user = User.objects.get(email=login_field)
+                if not user.is_staff :
+                    self.user = user
+            except User.DoesNotExist:
+                # Now try to authenticate with phone number
+                try:
+                    profile = RegularUserProfile.objects.get(email=login_field,Contact_number=Contact_number)
+                    user = profile.user
+                    if not user.is_staff :
+                        self.user = user
+                except RegularUserProfile.DoesNotExist:
+                    pass
+            
+            if self.user is None:
+                raise ValidationError("Invalid login credentials")
+                
+        return cleaned_data
+
+class RestaurantLoginForm(AuthenticationForm):
+    """Login form for restaurant staff with multiple auth options"""
+    login_field = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Email',}),
+    help_text="Enter your username or email"
+    )
+    restaurant_id = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Restaurant ID',
+        }),
+        # help_text="Enter your restaurant ID"
+    )
+
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        login_field = cleaned_data.get('login_field')
+        restaurant_id = cleaned_data.get('restaurant_id')
+        
+        if login_field  and restaurant_id:
+            self.user = None
+            
+            # Check if login_field is an email
+            if login_field:
+                try:
+                    user = User.objects.get(email=login_field)
+                    if user.is_staff:
+                        # Verify restaurant ID
+                        try:
+                            profile = StaffProfile.objects.get(user=user)
+                            if str(profile.Restaurant_id) == restaurant_id:
+                                self.user = user
+                        except StaffProfile.DoesNotExist:
+                            pass
+                except User.DoesNotExist:
+                    pass
+            else:
+                StaffProfile.DoesNotExist
+                # # Try username
+                # try:
+                #     user = User.objects.get(username=login_field)
+                #     if user.is_staff and user.check_password(password):
+                #         # Verify restaurant ID
+                #         try:
+                #             profile = StaffProfile.objects.get(user=user)
+                #             if str(profile.Restaurant_id) == restaurant_id:
+                #                 self.user = user
+                #         except StaffProfile.DoesNotExist:
+                #             pass
+                # except User.DoesNotExist:
+                #     pass
+            
+            if self.user is None:
+                raise ValidationError("Invalid login credentials or Restaurant ID")
+                
+        return cleaned_data    
+
+
 # from django import forms
 # from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth import get_user_model
