@@ -9,7 +9,7 @@ from .forms import (
     StaffRegistrationForm,RegularUserRegistrationForm,RestaurantLoginForm,CustomerLoginForm
 )
 from .models import StaffProfile,RegularUserProfile
-from Orders.models import orders
+from Orders.models import orders,UserOrder
 def customer_signup(request):
     if request.method == 'POST':
         form = RegularUserRegistrationForm(request.POST)
@@ -98,9 +98,11 @@ def Dashboard(request):
 def Profile(request):
     user=request.user
     user_profile = RegularUserProfile.objects.get(user=request.user)
+    user_order_det=UserOrder.objects.filter(user=request.user)
     context = {
         'data': user_profile,
         'user': user,
+        'user_order_det':user_order_det,
     }
     return render(request,'user_profile.html',context)
 

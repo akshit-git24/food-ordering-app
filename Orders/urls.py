@@ -4,5 +4,7 @@ app_name='orders'
 
 urlpatterns = [
     path('',views.order_list,name="order_list"),
-    path('create/',views.create_order,name="new_order")
+    # path('order/', views.place_order, name='place_order_with_item'),
+    path('create/',views.create_order,name="new_order"),
+    path('place_order/<int:id>/', views.place_order, name='place_order'),
 ]

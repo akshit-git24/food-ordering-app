@@ -15,7 +15,7 @@ class RegularUserProfile(models.Model):
     def __str__(self):
         return f"Regular User: {self.user.username}"
 
-# Profile model for staff users
+# Profile model for staff users or we can say for Restaurants
 class StaffProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_profile')
     Restaurant_id = models.IntegerField(unique=True,default=True)

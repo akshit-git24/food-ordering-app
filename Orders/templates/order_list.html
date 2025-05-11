@@ -176,7 +176,10 @@
             <p>{{od.body}}</p>
             <span class="price">₹{{od.price}}</span>
             <span class="price">By:{{od.restaurant}}</span>
-            <button class="order-btn">Add to Cart</button>
+            <form action="{% url 'orders:place_order' od.id %}" method="post">
+              {% csrf_token %}
+               <button type="submit" class="order-btn">Add to Cart</button>
+            </form> 
         </div>
          {% endfor %} 
     </div>
