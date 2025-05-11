@@ -164,6 +164,8 @@
 <header class="hero">
     <h1>Explore Our Delicious Menu</h1>
     <p>Order your favorite meals with just a few clicks!</p>
+    <br>
+    <p>Note: upload pictures to items will be Available soon...</p>
 </header>
 
 <section class="menu-container">
@@ -176,10 +178,14 @@
             <p>{{od.body}}</p>
             <span class="price">₹{{od.price}}</span>
             <span class="price">By:{{od.restaurant}}</span>
+            {%if not user.is_staff and not user.is_superuser and user.is_authenticated%}
             <form action="{% url 'orders:place_order' od.id %}" method="post">
               {% csrf_token %}
-               <button type="submit" class="order-btn">Add to Cart</button>
+            <button type="submit" class="order-btn">Add to Cart</button>
             </form> 
+            {%else%}
+            <span class="price">Login as a <a href="/user/customer/login">customer</a> to place order</span>
+            {%endif%}
         </div>
          {% endfor %} 
     </div>
