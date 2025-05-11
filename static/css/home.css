@@ -12,7 +12,7 @@ body {
 
 /* Header Section */
 .header {
-    background-image: url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe');
+    background-image: url('home_main.jpeg');
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -120,26 +120,7 @@ body {
     object-fit: cover;
     border-radius: 5px;
 }
-.footer .contact-info {
-    margin-bottom: 20px;
-}
 
-.footer .contact-info p {
-    margin: 5px 0;
-}
-
-.footer .rights {
-    font-size: 14px;
-}
-
-.footer  {
-    color: #ff5722;
-    text-decoration: none;
-}
-
-.footer :hover {
-    text-decoration: underline;
-}
 nav a:hover {
     background: #777; /* Darker shade for other links */
     transform: translateY(-2px);
